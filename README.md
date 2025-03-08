@@ -55,6 +55,7 @@ group of files, etc.
 
 You may also show the file tree as the following example:
 
+```
 project
 ├── README
 ├── dune-project
@@ -100,6 +101,7 @@ project
     ├── dune
     ├── location.ml: module offering a data type for a location in a file
     └── location.mli
+```
 ===============
 
 Progress
