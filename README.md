@@ -1,19 +1,13 @@
 AUTHORS
 -------
-
 - SOURABIE Kamon
 - PEREZ RAMIREZ Julian
-
-…
-
-===============
 
 Description of the project
 --------------------------
 
 This μ-project is a very simple compiler…
 
-===============
 
 Sources
 -------
@@ -25,7 +19,6 @@ Atlantique provides a project management platform: use it!)
 
 Release : tag 1.0 or commit acdeacdacdacdacd
 
-===============
 
 How to…
 -------
@@ -42,8 +35,6 @@ How to…
 
   dune exec ./pfxVM.exe -- TESTFILE.pfx -a 12 -a 52
 
-
-===============
 
 Structure of the project
 ------------------------
@@ -102,7 +93,6 @@ project
     ├── location.ml: module offering a data type for a location in a file
     └── location.mli
 ```
-===============
 
 Progress
 --------
@@ -111,7 +101,6 @@ Progress
 - There is still a bug in question 8.3 (new version of generate function)
 - …
 
-===============
 
 Know bugs and issues
 --------------------
@@ -120,7 +109,6 @@ Know bugs and issues
 - Compiler fails when xxx…
 - …
 
-===============
 
 Helpful resources
 -----------------
@@ -130,8 +118,6 @@ Helpful resources
   https://stackoverflow/yyyyyy
 - someone on GitHub provided an interesting example very similar to the answer of the question x.y : https://github.com/xxxx
 - …
-
-===============
 
 Difficulties
 ------------
