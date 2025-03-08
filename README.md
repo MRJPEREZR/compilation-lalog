@@ -12,28 +12,22 @@ This μ-project is a very simple compiler…
 Sources
 -------
 
-Git repository: https://gitlab-df.imt-atlantique.fr/...
-
-(obviously, you _will_ use a version control system such as Git, IMT
-Atlantique provides a project management platform: use it!)
-
-Release : tag 1.0 or commit acdeacdacdacdacd
-
+Git repository: https://gitlab-df.imt-atlantique.fr/j23perez1/compilation-lalog/-/tree/master
 
 How to…
 -------
 
 …retrieve the sources?
 
-  git clone https://gitlab-df.imt-atlantique.fr/...
+  `git clone https://gitlab-df.imt-atlantique.fr/j23perez1/compilation-lalog/-/tree/master`
 
 …compile?
 
-  dune …
+  `dune …`
 
 …execute and test?
 
-  dune exec ./pfxVM.exe -- TESTFILE.pfx -a 12 -a 52
+  `dune exec ./pfxVM.exe -- TESTFILE.pfx -a 12 -a 52`
 
 
 Structure of the project
