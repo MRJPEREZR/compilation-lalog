@@ -1,0 +1,52 @@
+# Ignore macOS metadata files
+.DS_Store
+._*
+
+# Dune build artifacts
+_build/
+*.install
+dune-project.lock
+
+# Compiled OCaml files
+*.cmx
+*.cmi
+*.cmo
+*.cma
+*.cmxa
+*.o
+*.a
+*.so
+
+# Merlin editor files
+.merlin
+
+# OPAM switch local files (if using OPAM)
+.opam
+
+# Utop history (if using Utop REPL)
+.utop-history
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs & temporary files
+*.log
+*.tmp
+*.cache
+*.bak
+
+# If using OCaml LSP (Language Server Protocol)
+.ocamlformat
+.ocamlformat-ignore
+
+# If using Dune's inline tests
+.inline_tests/
+
+# If you generate documentation with odoc
+_docs/
+
+# If using Esy (alternative package manager)
+esy.lock/
