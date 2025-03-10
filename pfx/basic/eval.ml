@@ -20,9 +20,12 @@ let step state =
   | Add :: q, x :: y :: rest -> Ok(q, (x + y) :: rest)
   | Sub :: q, x :: y :: rest -> Ok(q, (x - y) :: rest)
   | Mul :: q, x :: y :: rest -> Ok(q, (x * y) :: rest)
-  | Div :: q, x :: y :: rest -> Ok(q, (x / y) :: rest)
-  (* | Div :: q, _ :: 0 :: _ -> Error("Division by zero", state) *)
-  | Rem :: q, x :: y :: rest -> Ok(q, (x mod y) :: rest)
+  | Div :: q, x :: y :: rest -> 
+    if y = 0 then Error("Division by zero", state)
+    else Ok(q, (x / y) :: rest)
+  | Rem :: q, x :: y :: rest -> 
+    if y = 0 then Error("Remain by zero", state)
+    else Ok(q, (x mod y) :: rest)
   | _, _ -> Error("Invalid Operation", state)
 
 let eval_program (numargs, cmds) args =

@@ -37,15 +37,19 @@ let step_tests =
     ( "Invalid command" >:: fun _ ->
       let state = ([ Div ], [ 1 ]) in
       assert_equal (Error("Invalid Operation", state)) (step state) );
+      ( "Invalid command" >:: fun _ ->
+        let state = ([ Div ], [ 1; 0 ]) in
+        assert_equal (Error("Division by zero", state)) (step state) );
     ( "Rem command" >:: fun _ ->
       let state = ([ Rem ], [ 6; 2 ]) in
       assert_equal (Ok([], [ 0 ])) (step state) );
     ( "Invalid command" >:: fun _ ->
       let state = ([ Rem ], [ 1 ]) in
       assert_equal (Error("Invalid Operation", state)) (step state) );
+    ( "Invalid command" >:: fun _ ->
+      let state = ([ Rem ], [ 1; 0 ]) in
+      assert_equal (Error("Remain by zero", state)) (step state) );
   ]
-
-
 let suite =
   "Eval Tests"
   >::: [
