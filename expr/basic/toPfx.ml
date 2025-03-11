@@ -19,4 +19,4 @@ let rec generate (expr : expression) : command list =
   | Uminus e ->
     let code = generate e in  
     code @ [Push 0; Sub]  
-  | Var _ -> failwith "Not yet supported" 
+  | Var _ -> failwith "Not yet supported"
