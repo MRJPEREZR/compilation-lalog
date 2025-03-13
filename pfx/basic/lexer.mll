@@ -3,6 +3,8 @@
   
   (*open Parser*)
 
+  open Utils.Location
+
   type token = EOF | INT of int | PUSH | POP | SWAP | ADD | SUB | MUL | DIV | REM
 
   let print_token = function 
@@ -17,9 +19,11 @@
     | DIV    -> print_string "DIV"
     | REM    -> print_string "REM"
   
-  let mk_int nb =
+  let mk_int nb lexbuf =
     try INT (int_of_string nb)
-    with Failure _ -> failwith (Printf.sprintf "Illegal integer '%s': " nb)
+    with Failure _ -> 
+      let loc = curr lexbuf in
+        raise (Error(Printf.sprintf "Illegal integer '%s'" nb, loc))
 } 
 
 let newline = (['\n' '\r'] | "\r\n")
@@ -37,7 +41,7 @@ rule token = parse
   (* comments *)
   | "--" not_newline_char*  { token lexbuf }
   (* integers *)
-  | digit+ as nb           { mk_int nb }
+  | digit+ as nb           { mk_int nb lexbuf}
   (* commands  *)
   | "push"                 { PUSH }
   | "pop"                  { POP }
@@ -48,4 +52,7 @@ rule token = parse
   | "div"                  { DIV }
   | "rem"                  { REM }
   (* illegal characters *)
-  | _ as c                  { failwith (Printf.sprintf "Illegal character '%c': " c) }
+  | _ as c                 {
+    let loc = curr lexbuf in
+      raise (Error (Printf.sprintf "Illegal character '%c'" c, loc))
+      }

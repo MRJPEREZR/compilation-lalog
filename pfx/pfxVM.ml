@@ -28,7 +28,9 @@ let _ =
   Arg.parse ["-a",Arg.Int register_arg,"integer argument"] parse_eval "" *)
 
 open BasicPfx.Lexer
-  let rec examine_all lexbuf =
+open Utils.Location
+
+let rec examine_all lexbuf =
   let result = token lexbuf in
   print_token result;
   print_string " ";
@@ -37,14 +39,21 @@ open BasicPfx.Lexer
   | _   -> examine_all lexbuf
 
 let compile file =
-print_string ("File "^file^" is being treated!\n");
-try
-  let input_file = open_in file in
-  let lexbuf = Lexing.from_channel input_file in
-  examine_all lexbuf;
-  print_newline ();
-  close_in (input_file)
-with Sys_error _ ->
-  print_endline ("Can't find file '" ^ file ^ "'")
+  print_string ("File "^file^" is being treated!\n");
+  try
+    let input_file = open_in file in
+    let lexbuf = Lexing.from_channel input_file in
+    init lexbuf file;
+    try
+      examine_all lexbuf;
+      print_newline ();
+      close_in (input_file)
+    with
+    | Error (msg, loc) ->
+      print loc;
+      print_endline msg;
+      close_in (input_file)
+  with Sys_error _ ->
+    print_endline ("Can't find file '" ^ file ^ "'")
 
 let _ = Arg.parse [] compile ""
