@@ -33,7 +33,7 @@ let digit = ['0'-'9']
 
 rule token = parse
   (* newlines *)
-  | newline { token lexbuf }
+  | newline { token lexbuf } (* add incr_line lexbuf if you want to read multiple lines*)
   (* blanks *)
   | blank + { token lexbuf }
   (* end of file *)
