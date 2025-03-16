@@ -1,11 +1,9 @@
 {
   (*Question 6.1*)
   
-  (*open Parser*)
+  open Parser
 
   open Utils.Location
-
-  type token = EOF | INT of int | PUSH | POP | SWAP | ADD | SUB | MUL | DIV | REM
 
   let print_token = function 
     | EOF    -> print_string "EOF"

@@ -22,10 +22,10 @@ let step state =
   | Mul :: q, x :: y :: rest -> Ok(q, (x * y) :: rest)
   | Div :: q, x :: y :: rest -> 
     if y = 0 then Error("Division by zero", state)
-    else Ok(q, (y / x) :: rest)
+    else Ok(q, (x / y) :: rest)
   | Rem :: q, x :: y :: rest -> 
     if y = 0 then Error("Remain by zero", state)
-    else Ok(q, (y mod x) :: rest)
+    else Ok(q, (x mod y) :: rest)
   | _, _ -> Error("Invalid Operation", state)
 
 let eval_program (numargs, cmds) args =
@@ -40,7 +40,8 @@ let eval_program (numargs, cmds) args =
        end
   in
   if numargs = List.length args then
-    match execute (cmds,args) with
+    let stack = args in 
+    match execute (cmds, stack) with
     | Ok None -> printf "No result\n"
     | Ok(Some result) -> printf "= %i\n" result
     | Error(msg,s) -> printf "Raised error %s in state %s\n" msg (string_of_state s)
