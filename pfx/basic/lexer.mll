@@ -1,5 +1,5 @@
 {
-  (*Question 6.1*)
+  (*Question 6.1 and 9.3*)
   
   open Parser
 
@@ -16,6 +16,10 @@
     | MUL    -> print_string "MUL"
     | DIV    -> print_string "DIV"
     | REM    -> print_string "REM"
+    | EXEC   -> print_string "EXEC"
+    | GET    -> print_string "GET"
+    | LBRACE -> print_string "LBRACE"
+    | RBRACE -> print_string "RBRACE"
   
   let mk_int nb lexbuf =
     try INT (int_of_string nb)
@@ -49,6 +53,10 @@ rule token = parse
   | "mul"                  { MUL }
   | "div"                  { DIV }
   | "rem"                  { REM }
+  | "exec"                 { EXEC }
+  | "get"                  { GET }
+  | "{"                    { LBRACE }
+  | "}"                    { RBRACE }
   (* illegal characters *)
   | _ as c                 {
     let loc = curr lexbuf in
