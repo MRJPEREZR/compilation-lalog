@@ -1,0 +1,4 @@
+(test
+  (name test_generate)  ; Name of the test executable
+  (modules test_generate)  ; Module containing the tests
+  (libraries basicExpr basicPfx ounit2))  ; Link your eval module
