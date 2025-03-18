@@ -29,11 +29,11 @@ let step state =
   | Sub :: q, Int x :: Int y :: rest -> Ok(q, Int (x - y) :: rest)
   | Mul :: q, Int x :: Int y :: rest -> Ok(q, Int (x * y) :: rest)
   | Div :: q, Int x :: Int y :: rest -> 
-    if y = 0 then Error("Division by zero", state)
-    else Ok(q, Int (x / y) :: rest)
+    if x = 0 then Error("Division by zero", state)
+    else Ok(q, Int (y / x) :: rest)
   | Rem :: q, Int x :: Int y :: rest -> 
-    if y = 0 then Error("Remain by zero", state)
-    else Ok(q, Int (x mod y) :: rest)
+    if x = 0 then Error("Remain by zero", state)
+    else Ok(q, Int (y mod x) :: rest)
   | Exec :: q, ExecSeq cmds :: rest -> Ok (cmds @ q, rest)
   | Get :: q, Int i :: rest ->
       if i < 0 || i >= List.length rest then

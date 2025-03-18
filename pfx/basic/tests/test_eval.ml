@@ -34,22 +34,22 @@ let step_tests =
       let state = ([ Mul ], int_stack [ 1 ]) in
       assert_equal (Error("Invalid Operation", state)) (step state) );
     ( "Div command" >:: fun _ ->
-      let state = ([ Div ], int_stack [ 6; 2 ]) in
+      let state = ([ Div ], int_stack [ 2; 6 ]) in
       assert_equal (Ok([], [ Int 3 ])) (step state) );
     ( "Invalid command" >:: fun _ ->
       let state = ([ Div ], int_stack [ 1 ]) in
       assert_equal (Error("Invalid Operation", state)) (step state) );
       ( "Invalid command" >:: fun _ ->
-        let state = ([ Div ], int_stack [ 1; 0 ]) in
+        let state = ([ Div ], int_stack [ 0; 1 ]) in
         assert_equal (Error("Division by zero", state)) (step state) );
     ( "Rem command" >:: fun _ ->
-      let state = ([ Rem ], int_stack [ 6; 2 ]) in
+      let state = ([ Rem ], int_stack [ 2; 6 ]) in
       assert_equal (Ok([], [ Int 0 ])) (step state) );
     ( "Invalid command" >:: fun _ ->
       let state = ([ Rem ], int_stack [ 1 ]) in
       assert_equal (Error("Invalid Operation", state)) (step state) );
     ( "Invalid command" >:: fun _ ->
-      let state = ([ Rem ], int_stack [ 1; 0 ]) in
+      let state = ([ Rem ], int_stack [ 0; 1 ]) in
       assert_equal (Error("Remain by zero", state)) (step state) );
     ( "Test Exec" >:: fun _ ->
       let state = ([Exec], [ExecSeq [Push 20; Add]]) in
