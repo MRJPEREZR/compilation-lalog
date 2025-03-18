@@ -29,7 +29,7 @@ let parse_eval file =
 let _ =
   Arg.parse [] parse_eval "" *)
 
-open Fun
+open FunExpr
 open Utils
 
 (* The main function *)
@@ -40,15 +40,19 @@ let parse_eval file =
     let lexbuf = Lexing.from_channel input_file in
     begin
       try
+        (* Parse the input file into an expression *)
         let expr_prog = Parser.expression Lexer.token lexbuf in
-        let pfx_prog = 0, ToPfx.generate expr_prog in
-        print_endline (BasicPfx.Ast.string_of_program pfx_prog);
-          BasicPfx.Eval.eval_program pfx_prog []
+        (* Compile the expression into a Pfx program *)
+        let pfx_prog = ToPfx.generate [] expr_prog in  (* Pass an empty environment *)
+        (* Print the Pfx program *)
+        print_endline (BasicPfx.Ast.string_of_program (0, pfx_prog));
+        (* Evaluate the Pfx program *)
+        BasicPfx.Eval.eval_program (0, pfx_prog) []  (* Pass an empty argument list *)
       with
-      | BasicPfx.Parser.Error ->
+      | Parser.Error ->
           print_string "Syntax error: ";
           Location.print (Location.curr lexbuf)
-      | Location.Error(e,l) ->
+      | Location.Error(e, l) ->
           print_string e;
           Location.print l
     end;
@@ -59,3 +63,4 @@ let parse_eval file =
 (* Here we add the parsing of the command line and link to the main function *)
 let _ =
   Arg.parse [] parse_eval ""
+
