@@ -1,5 +1,5 @@
 (library
- (name fun)
+ (name funExpr)
  (libraries utils common basicPfx)
  (modules Ast Lexer Parser Eval toPfx))
 
