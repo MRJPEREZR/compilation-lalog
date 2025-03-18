@@ -57,7 +57,7 @@ let step_tests =
       assert_equal expected (step state));
      ("Test Get" >:: fun _ -> 
       let state = ([Get], int_stack [1; 10; 20]) in
-      let expected = Ok ([], [Int 10; Int 1; Int 10; Int 20]) in
+      let expected = Ok ([], [Int 20; Int 10; Int 20]) in
       assert_equal expected (step state));
   ]
 let suite =
