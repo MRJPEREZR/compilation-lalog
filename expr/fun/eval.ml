@@ -1,7 +1,4 @@
 (* Question 10.3 *)
-
-open Ast
-
 exception RuntimeError of string
 
 type value =
@@ -9,19 +6,33 @@ type value =
   | Closure of (string * value) list * string * Ast.expression
 
 let rec eval env = function
-  | Const c -> c
-  | Var v -> (try List.assoc v env with Not_found -> raise(RuntimeError("Unbound variable "^v)))
-  | Binop(op,e1,e2) ->
-     begin
-       match op,eval env e2 with
-       | (Bdiv | Bmod), 0 -> raise(RuntimeError("division by zero"))
-       | _, v -> (BinOp.eval op) (eval env e1) v
-     end
-  | Uminus e -> - (eval env e)
-  | Fun(x, e) -> 
-    (* A function is a closure: it captures the current environment *)
-    Closure(env, x, e)
-  | App(e1, e2) ->
+  | Ast.Const c -> Int c
+  | Ast.Var v ->
+      (try List.assoc v env
+       with Not_found -> raise (RuntimeError ("Unbound variable " ^ v)))
+  | Ast.Binop(op, e1, e2) ->
+      begin
+        match eval env e2 with
+        | Int 0 when op = BinOp.Bdiv || op = BinOp.Bmod ->
+            raise (RuntimeError "division by zero")
+        | Int v2 ->
+            begin
+              match eval env e1 with
+              | Int v1 -> Int (BinOp.eval op v1 v2)
+              | _ -> raise (RuntimeError "Invalid operand for binary operation")
+            end
+        | _ -> raise (RuntimeError "Invalid operand for binary operation")
+      end
+  | Ast.Uminus e ->
+      begin
+        match eval env e with
+        | Int v -> Int (-v)
+        | _ -> raise (RuntimeError "Invalid operand for unary minus")
+      end
+  | Ast.Fun(x, e) ->
+      (* A function is a closure: it captures the current environment *)
+      Closure(env, x, e)
+  | Ast.App(e1, e2) ->
       (* Evaluate e1 to get the function (should be a closure) *)
       let f = eval env e1 in
       (* Evaluate e2 to get the argument *)
