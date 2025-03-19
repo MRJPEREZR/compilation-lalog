@@ -12,7 +12,6 @@ let result = eval [] expr
 (* Test expression: (λx.x + 1) 2 *)
 let expr2 = App(Fun("x", Binop(Badd, Var "x", Const 1)), Const 2)
 
-(* Generate Pfx code from the expression *)
 let pfx_code2 = generate [] expr2
 let result2 = eval [] expr2
 
