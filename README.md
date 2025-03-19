@@ -20,6 +20,15 @@ Description of the project
 This μ-project is a very simple compiler. 
 It produces a working Expr compiler and a working Pfx virtual machine.
 
+There are the following branches which track the work done per each stage:
+- exercises-1-to-6
+- exercise-7
+- exercise-8
+- exercise-9
+- exercise-10
+- exercise-11
+- master (the final one)
+
 
 Sources
 -------
