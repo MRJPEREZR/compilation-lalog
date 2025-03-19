@@ -45,11 +45,34 @@ How to…
 
 …compile?
 
-  `dune build`
+pfxVM:
+  ```
+  cd pfx/
+  dune build
+  ```
+pfx basic evaluator:
+  ```
+  cd pfx/basic
+  dune build
+  ```
+
 
 …execute and test?
 
-  `dune exec ./pfxVM.exe -- -a 3 -a 7 -a 2 pfx/basic/tests/ok_prog1.pfx`
+pfx basic evaluator tests:
+  ```
+  cd pfx/basic/tests
+  dune build
+  dune runtest
+  ```
+Via CLI:
+```
+cd pfx/
+dune exec ./pfxVM.exe -- basic/tests/ok_prog.pfx
+dune exec ./pfxVM.exe -- -a 3 -a 7 -a 2 basic/tests/ok_prog1.pfx
+dune exec ./pfxVM.exe -- basic/tests/ok_prog2.pfx
+dune exec ./pfxVM.exe -- basic/tests/ok_prog3.pfx
+```
 
 
 Structure of the project
