@@ -13,7 +13,8 @@ It produces a working Expr compiler and a working Pfx virtual machine.
 Sources
 -------
 
-Git repository: https://gitlab-df.imt-atlantique.fr/j23perez1/compilation-lalog/-/tree/master
+**Git** **Repository**  
+[**https://gitlab-df.imt-atlantique.fr/j23perez1/compilation-lalog/-/tree/master**](https://gitlab-df.imt-atlantique.fr/j23perez1/compilation-lalog/-/tree/master) 
 
 How to…
 -------
@@ -135,10 +136,6 @@ Difficulties
 - Compiling the program and understanding Dune—its structure for creating modules (Dune files), defining interfaces (.mli files), and generating executables from .ml files.
 
 # COMPILATION PROJECT QUESTIONS AND ANSWERS
-
-**Git** **Repository**  
-[**https://gitlab-df.imt-atlantique.fr/j23perez1/compilation-lalog/-/tree/master**](https://gitlab-df.imt-atlantique.fr/j23perez1/compilation-lalog/-/tree/master) 
-
 **Questions**
 
 **Exercise 1 (expl)**  
