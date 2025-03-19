@@ -6,7 +6,8 @@ AUTHORS
 Description of the project
 --------------------------
 
-This μ-project is a very simple compiler…
+This μ-project is a very simple compiler. 
+It produces a working Expr compiler and a working Pfx virtual machine.
 
 
 Sources
@@ -23,11 +24,11 @@ How to…
 
 …compile?
 
-  `dune …`
+  `dune build`
 
 …execute and test?
 
-  `dune exec ./pfxVM.exe -- TESTFILE.pfx -a 12 -a 52`
+  `dune exec ./pfxVM.exe -- -a 3 -a 7 -a 2 pfx/basic/tests/ok_prog1.pfx`
 
 
 Structure of the project
@@ -35,17 +36,11 @@ Structure of the project
 
 The project is organized as following:
 
-Explain here the organization of your project, what is the use of each file or
-group of files, etc.
-
-You may also show the file tree as the following example:
 
 ```
-project
-├── README
+.
 ├── dune-project
-├── expr: the expr compiler
-│   ├── README
+├── expr
 │   ├── basic
 │   │   ├── ast.ml
 │   │   ├── ast.mli
@@ -54,72 +49,87 @@ project
 │   │   ├── eval.mli
 │   │   ├── lexer.mll
 │   │   ├── parser.mly
-│   │   ├── tests: for tests
-│   │   │   └── an_example.expr
-│   │   ├── toPfx.ml             <- To edit
+│   │   ├── tests
+│   │   │   ├── an_example.expr
+│   │   │   ├── dune
+│   │   │   └── test_generate.ml
+│   │   ├── toPfx.ml
 │   │   └── toPfx.mli
 │   ├── common
 │   │   ├── binOp.ml
 │   │   ├── binOp.mli
 │   │   └── dune
-│   ├── compiler.ml: main file for the expr compiler
+│   ├── compiler.ml
 │   ├── dune
-│   ├── fun: the expr parser for section 7
+│   ├── fun
 │   │   ├── ast.ml
 │   │   ├── ast.mli
+│   │   ├── dune
+│   │   ├── eval.ml
+│   │   ├── eval.mli
 │   │   ├── lexer.mll
-│   │   └── parser.mly
-│   └── main.ml
-├── pfx: the pfx VM
+│   │   ├── parser.mly
+│   │   ├── tests
+│   │   │   ├── an_example1.expr
+│   │   │   ├── an_example2.expr
+│   │   │   ├── an_example3.expr
+│   │   │   ├── an_example.expr
+│   │   │   ├── dune
+│   │   │   └── test_generate.ml
+│   │   ├── toPfx.ml
+│   │   └── toPfx.mli
+│   ├── main.ml
+│   └── README.md
+├── pfx
 │   ├── basic
-│   │   ├── ast.ml               <- To edit
+│   │   ├── ast.ml
 │   │   ├── ast.mli
 │   │   ├── dune
-│   │   ├── eval.ml              <- To edit
+│   │   ├── eval.ml
 │   │   ├── eval.mli
-│   │   ├── lexer.mll            <- To edit
-│   │   ├── parser.mly           <- To edit
-│   │   └── tests: for tests
-│   │       └── ok_prog.pfx
-│   └── pfxVM.ml: main file for the pfx VM
+│   │   ├── lexer.mll
+│   │   ├── parser.mly
+│   │   └── tests
+│   │       ├── dune
+│   │       ├── error_syntax_prog1.pfx
+│   │       ├── error_syntax_prog.pfx
+│   │       ├── ok_prog1.pfx
+│   │       ├── ok_prog2.pfx
+│   │       ├── ok_prog3.pfx
+│   │       ├── ok_prog.pfx
+│   │       └── test_eval.ml
+│   ├── dune
+│   └── pfxVM.ml
+├── README.md
 └── utils
     ├── dune
-    ├── location.ml: module offering a data type for a location in a file
-    └── location.mli
+    ├── location.ml
+    ├── location.mli
+    └── README.md
 ```
 
 Progress
 --------
 
-- We stopped at question 10.1 (proof of derivation)
-- There is still a bug in question 8.3 (new version of generate function)
-- …
+- We stopped at question 12 (proof of derivation of (((λx.λy.(x−y)) 12) 8))
 
 
 Know bugs and issues
 --------------------
 
-- We were not able to manage xxx…
-- Compiler fails when xxx…
-- …
 
 
 Helpful resources
 -----------------
 
-- we used Stack Overflow to solve the problem of xxx :
-  https://stackoverflow/xxxxxxi
-  https://stackoverflow/yyyyyy
-- someone on GitHub provided an interesting example very similar to the answer of the question x.y : https://github.com/xxxx
-- …
+- [Opam 101: The First Steps](https://ocamlpro.com/blog/2024_01_23_opam_101_the_first_steps/)
+- [Explore the OCaml Documentation](https://ocaml.org/docs)
+- [Chapter 17 Lexer and parser generators (ocamllex, ocamlyacc)](https://ocaml.org/manual/5.3/lexyacc.html)
+- [Real World OCaml
+Functional programming for the masses](https://dev.realworldocaml.org/)
+
 
 Difficulties
 ------------
-
-- team programming: having to use a VCS such as git and avoiding conflicts
-- thinking functional
-- changing habits by using an unknown language
-- Not a single difficulty: the project was so easy that my 8-old brother did it
-  completely; the Ocaml language is so nice I enjoyed the project, …
-- …
-
+- Thinking functionally: The transition from the object-oriented paradigm to the functional paradigm can be quite difficult at first. However, by reading the documentation and gaining experience over time, it becomes more familiar.
+- Compiling the program and understanding Dune—its structure for creating modules (Dune files), defining interfaces (.mli files), and generating executables from .ml files.
