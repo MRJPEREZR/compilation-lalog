@@ -45,3 +45,4 @@ let rec eval env = function
           (* Evaluate the body in the extended environment *)
           eval new_env body
       | _ -> raise (RuntimeError "Application of non-function value")
+      

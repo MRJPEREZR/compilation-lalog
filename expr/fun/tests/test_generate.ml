@@ -15,6 +15,12 @@ let expr2 = App(Fun("x", Binop(Badd, Var "x", Const 1)), Const 2)
 let pfx_code2 = generate [] expr2
 let result2 = eval [] expr2
 
+(* Test expression: (5 / 1) + (8 * -9) *)
+let expr3 = Binop(BinOp.Badd, Binop(BinOp.Bdiv, Const 5, Const 1), Binop(BinOp.Bmul, Const 8, Uminus (Const 9) ))
+
+let pfx_code3 = generate [] expr3
+let result3 = eval [] expr3
+
 let generate_tests =
   [
     "Generated code for expression" >:: (fun _ -> 
@@ -26,6 +32,11 @@ let generate_tests =
       let expected = [Push 2; ExecSeq [Push 0; Get; Push 1; Add]; Exec] in
       assert_equal expected pfx_code2
     ); 
+
+    "Generated code for (5 / 1) + (8 * -9)" >:: (fun _ -> 
+      let expected = [Push 1; Push 5; Div ; Push 8; Push 9; Push 0; Sub; Mul; Add] in
+      assert_equal expected pfx_code3
+    ); 
   ]
 let eval_tests =
   [
@@ -36,6 +47,10 @@ let eval_tests =
     "Evaluate expression" >:: (fun _ -> 
       let expected = Int 3 in
       assert_equal expected result2
+    );
+    "Evaluate expression" >:: (fun _ -> 
+      let expected = Int (-67) in
+      assert_equal expected result3
     ); 
   ]
 let suite =

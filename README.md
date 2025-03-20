@@ -45,21 +45,39 @@ How to…
 
 …compile?
 
-pfxVM:
+**pfxVM**:
   ```
   cd pfx/
   dune build
   ```
-pfx basic evaluator:
+**pfx basic evaluator**:
   ```
   cd pfx/basic
   dune build
   ```
 
+**expr compiler**
+```
+cd expr/
+dune build
+```
+
+**expr basic pfx generator**
+```
+cd expr/basic
+dune build
+```
+
+**expr fun pfx generator**
+```
+cd expr/fun
+dune build
+```
+
 
 …execute and test?
 
-pfx basic evaluator tests:
+**pfx basic evaluator tests:**
   ```
   cd pfx/basic/tests
   dune build
@@ -70,9 +88,32 @@ Via CLI:
 cd pfx/
 dune exec ./pfxVM.exe -- basic/tests/ok_prog.pfx
 dune exec ./pfxVM.exe -- -a 3 -a 7 -a 2 basic/tests/ok_prog1.pfx
-dune exec ./pfxVM.exe -- basic/tests/ok_prog2.pfx
+dune exec ./pfxVM.exe -- basic/tests/ok_prog2.pfx 
 dune exec ./pfxVM.exe -- basic/tests/ok_prog3.pfx
+dune exec ./pfxVM.exe -- basic/tests/error_syntax_prog.pfx
+dune exec ./pfxVM.exe -- basic/tests/error_syntax_prog1.pfx
 ```
+ok_prog.pfx should return: =5
+ok_prog1.pfx should return: =5
+ok_prog2.pfx should return: =10
+ok_prog3.pfx should return: =-67
+error_syntax_prog.pfx should raise an error: Illegal character 's'
+error_syntax_prog.pfx should raise an error: Raised error Invalid Operation in state executing Add with stack [1]
+
+**expr basic generator tests:**
+```
+cd expr/basic/tests
+dune build
+dune runtest
+```
+
+**expr fun generator tests:**
+```
+cd expr/fun/tests
+dune build
+dune runtest
+```
+
 
 
 Structure of the project

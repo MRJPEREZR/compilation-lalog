@@ -1,4 +1,7 @@
-(* open BasicExpr
+(* 
+(* Compiler for BasicExpr *)
+
+open BasicExpr
 open Utils
 
 (* The main function *)
@@ -29,6 +32,9 @@ let parse_eval file =
 let _ =
   Arg.parse [] parse_eval "" *)
 
+(* 
+
+Compiler for FunExpr *)
 open FunExpr
 open Utils
 
