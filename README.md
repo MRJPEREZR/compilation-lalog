@@ -20,16 +20,6 @@ Description of the project
 This μ-project is a very simple compiler. 
 It produces a working Expr compiler and a working Pfx virtual machine.
 
-There are the following branches which track the work done per each stage:
-- exercises-1-to-6
-- exercise-7
-- exercise-8
-- exercise-9
-- exercise-10
-- exercise-11
-- master (the final one)
-
-
 Sources
 -------
 
@@ -106,6 +96,12 @@ cd expr/basic/tests
 dune build
 dune runtest
 ```
+Via CLI:
+Uncomment the first part of the compiler.ml file (per dafault it is the content for testing Fun and App support, not the basic one).
+```
+cd expr/
+dune exec ./compiler.exe -- basic/tests/an_example.expr
+```
 
 **expr fun generator tests:**
 ```
@@ -113,7 +109,18 @@ cd expr/fun/tests
 dune build
 dune runtest
 ```
-
+Via CLI:
+```
+cd expr/
+dune exec ./compiler.exe -- fun/tests/an_example.expr
+dune exec ./compiler.exe -- fun/tests/an_example1.expr
+dune exec ./compiler.exe -- fun/tests/an_example2.expr
+dune exec ./compiler.exe -- fun/tests/an_example3.expr
+```
+an_example.expr should return -67
+an_example1.expr should return 3
+an_example2.expr should return 0 (It is a well-know bug to resolve in  question 13)
+an_example3.expr should return 7
 
 
 Structure of the project
@@ -206,7 +213,8 @@ Progress
 
 Know bugs and issues
 --------------------
-
+- Evaluating this expression (fun x -> (fun y -> x - y) 12 ) 8 should return 4 instead of 0.
+This issue is expected to be fix resolving question 13.
 
 
 Helpful resources
@@ -397,24 +405,37 @@ Defining *M* as a mapping from variables to memory locations (not implemented ye
 **Question 5.2 (code):**  
 **Define a function to generate implementing the semantics you defined in the previous question. It should be in the file expr/basic/toPfx.ml.**
 ```
+open Ast
+open BasicPfx.Ast
+
+(* Question 5.2 *)
 let rec generate (expr : expression) : command list =
- match expr with
- | Const n -> [Push n]
- | Binop (op, e1, e2) ->
-   let code1 = generate e1 in 
-   let code2 = generate e2 in 
-   let op_code = match op with 
-     | BinOp.Badd -> Add
-     | BinOp.Bsub -> Sub
-     | BinOp.Bmul -> Mul
-     | BinOp.Bdiv -> Div
-     | BinOp.Bmod -> Rem
-   in
-   code1 @ code2 @ [op_code] 
- | Uminus e ->
-   let code = generate e in 
-   code @ [Push 0; Sub] 
- | Var _ -> failwith "Not yet supported"
+  match expr with
+  | Const n -> [Push n]
+  | Binop (BinOp.Badd, e1, e2) ->
+      let code1 = generate e1 in  
+      let code2 = generate e2 in  
+      code1 @ code2 @ [Add]
+  | Binop (BinOp.Bsub, e1, e2) ->
+      let code1 = generate e1 in  
+      let code2 = generate e2 in  
+      code2 @ code1 @ [Sub] (* Reverse order *)
+  | Binop (BinOp.Bmul, e1, e2) ->
+      let code1 = generate e1 in  
+      let code2 = generate e2 in  
+      code1 @ code2 @ [Mul]
+  | Binop (BinOp.Bdiv, e1, e2) ->
+      let code1 = generate e1 in  
+      let code2 = generate e2 in  
+      code2 @ code1 @ [Div]  (* Reverse order: denominator first *)
+  | Binop (BinOp.Bmod, e1, e2) ->
+      let code1 = generate e1 in  
+      let code2 = generate e2 in  
+      code2 @ code1 @ [Rem]  (* Reverse order: denominator first *)
+  | Uminus e ->
+      let code = generate e in  
+      code @ [Push 0; Sub]  
+  | Var _ -> failwith "Not yet supported"
 ```
 To test it:
 ```  
@@ -1057,33 +1078,45 @@ The new version for generate is:
 open Ast
 open BasicPfx.Ast
 
-
 (* Question 10.3 *)
-let rec generate env (expr: expression) : command list =
- match expr with
- | Const n -> [Push n]
- | Var x -> [Push (List.assoc x env); Get]
- | Binop (op, e1, e2) ->
-     let code1 = generate env e1 in 
-     let code2 = generate env e2 in
-     let op_code = match op with
-       | BinOp.Badd -> Add
-       | BinOp.Bsub -> Sub
-       | BinOp.Bmul -> Mul
-       | BinOp.Bdiv -> Div
-       | BinOp.Bmod -> Rem
-     in
-     code1 @ code2 @ [op_code]
- | Uminus e ->
-     let code = generate env e in 
-     code @ [Push 0; Sub] 
- | App(e1, e2) ->
-     let code2 = generate env e2 in 
-     let code1 = generate env e1 in 
-     code2 @ code1 @ [Exec]
- | Fun(x, e) ->
-     let new_env = (x, 0) :: env in
-     [ExecSeq (generate new_env e)]
+let rec generate env (expr : expression) : command list =
+    match expr with
+    | Const n -> [Push n]
+    | Var x -> 
+        (try 
+           [Push (List.assoc x env); Get] 
+         with Not_found -> failwith ("Unbound variable: " ^ x))
+    | Binop (BinOp.Badd, e1, e2) ->
+        let code1 = generate env e1 in  
+        let code2 = generate env e2 in  
+        code1 @ code2 @ [Add]
+    | Binop (BinOp.Bsub, e1, e2) ->
+        let code1 = generate env e1 in  
+        let code2 = generate env e2 in  
+        code2 @ code1 @ [Sub] (* Reverse order *)
+    | Binop (BinOp.Bmul, e1, e2) ->
+        let code1 = generate env e1 in  
+        let code2 = generate env e2 in  
+        code1 @ code2 @ [Mul]
+    | Binop (BinOp.Bdiv, e1, e2) ->
+        let code1 = generate env e1 in  
+        let code2 = generate env e2 in  
+        code2 @ code1 @ [Div]  (* Reverse order: denominator first *)
+    | Binop (BinOp.Bmod, e1, e2) ->
+        let code1 = generate env e1 in  
+        let code2 = generate env e2 in  
+        code2 @ code1 @ [Rem]  (* Reverse order: denominator first *)
+    | Uminus e ->
+        let code = generate env e in  
+        code @ [Push 0; Sub]  
+    | App(e1, e2) ->
+        let code2 = generate env e2 in  
+        let code1 = generate env e1 in  
+        code2 @ code1 @ [Exec] 
+    | Fun(x, e) ->
+        let new_env = (x, List.length env) :: env in
+        [ExecSeq (generate new_env e)]
+  
 ```
 To test it via terminal, it was required to edit also the **eval.ml**, **toPfx.ml** and the **compiler.ml.**  
 
