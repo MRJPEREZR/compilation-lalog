@@ -24,14 +24,14 @@ Sources
 -------
 
 **Git** **Repository**  
-[**https://gitlab-df.imt-atlantique.fr/j23perez1/compilation-lalog/-/tree/master**](https://gitlab-df.imt-atlantique.fr/j23perez1/compilation-lalog/-/tree/master) 
+[**https://github.com/MRJPEREZR/compilation-lalog**](https://github.com/MRJPEREZR/compilation-lalog) 
 
 How to…
 -------
 
 …retrieve the sources?
 
-  `git clone https://gitlab-df.imt-atlantique.fr/j23perez1/compilation-lalog/-/tree/master`
+  `git clone git@github.com:MRJPEREZR/compilation-lalog.git`
 
 …compile?
 
