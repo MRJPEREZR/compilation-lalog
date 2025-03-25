@@ -775,13 +775,13 @@ let _ =
  Arg.parse ["-a", Arg.Int register_arg,"integer argument"] parse_eval ""
 ```
 To test manually the pfxVM, in the terminal using the command:  
-**dune exec ./pfxVM.exe \-- \-a 7 \-a 3 \-a 2  basic/tests/ok\_prog.pfx**  
+**dune exec ./pfxVM.exe \-- \-a 7 \-a 3 \-a 2  basic/tests/ok\_prog1.pfx**  
 With the ok\_prog.pfx as follow: *3 add div*  
 It returns 5:  
 ![][image11]  
      
 Now, if it added a syntax error, the pfxVM.ml is also able to show the error location:  
-*0 push 4 push 2 **sum** \-- error due to sum is not declared*  
+*3 add divv \-- 5 if passing -a 3 -a 7 -a 2*  
 *![][image12]*
 
 **Exercise 9**  
