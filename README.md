@@ -87,8 +87,8 @@ dune exec ./pfxVM.exe -- basic/tests/error_syntax_prog1.pfx
 - ok_prog1.pfx should return: =5
 - ok_prog2.pfx should return: =10
 - ok_prog3.pfx should return: =-67
-- error_syntax_prog.pfx should raise an error: Illegal character 's'
-- error_syntax_prog.pfx should raise an error: Raised error Invalid 
+- error_syntax_prog.pfx should raise an error: Illegal character 'h'
+- error_syntax_prog1.pfx should raise an error: Raised error Invalid 
 - Operation in state executing Add with stack [1]
 
 **expr basic generator tests:**
@@ -693,7 +693,7 @@ let compile file =
 let _ = Arg.parse [] compile ""
 ```
 The content of the file error\_syntax\_prog.pfx is:  
-*0 push 4 push 2 **sum** \-- error*  
+*0 push 4 push**h** 2  \-- error*  
 ![][image10]
 
 **Exercise 8 (A first Pfx parser)**  
@@ -1346,7 +1346,7 @@ The proof derivation computing is presenting below:
 [image7]: images/image7.png
 [image8]: images/image8.png
 [image9]: images/image9.png
-[image10]: images/image11.png
+[image10]: images/image10.png
 [image11]: images/image11.png
 [image12]: images/image12.png
 [image13]: images/image13.png
