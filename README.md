@@ -83,12 +83,13 @@ dune exec ./pfxVM.exe -- basic/tests/ok_prog3.pfx
 dune exec ./pfxVM.exe -- basic/tests/error_syntax_prog.pfx
 dune exec ./pfxVM.exe -- basic/tests/error_syntax_prog1.pfx
 ```
-ok_prog.pfx should return: =5
-ok_prog1.pfx should return: =5
-ok_prog2.pfx should return: =10
-ok_prog3.pfx should return: =-67
-error_syntax_prog.pfx should raise an error: Illegal character 's'
-error_syntax_prog.pfx should raise an error: Raised error Invalid Operation in state executing Add with stack [1]
+- ok_prog.pfx should return: =5
+- ok_prog1.pfx should return: =5
+- ok_prog2.pfx should return: =10
+- ok_prog3.pfx should return: =-67
+- error_syntax_prog.pfx should raise an error: Illegal character 's'
+- error_syntax_prog.pfx should raise an error: Raised error Invalid 
+- Operation in state executing Add with stack [1]
 
 **expr basic generator tests:**
 ```
@@ -117,10 +118,10 @@ dune exec ./compiler.exe -- fun/tests/an_example1.expr
 dune exec ./compiler.exe -- fun/tests/an_example2.expr
 dune exec ./compiler.exe -- fun/tests/an_example3.expr
 ```
-an_example.expr should return -67
-an_example1.expr should return 3
-an_example2.expr should return 0 (It is a well-know bug to resolve in  question 13)
-an_example3.expr should return 7
+- an_example.expr should return -67
+- an_example1.expr should return 3
+- an_example2.expr should return 0 (It is a well-know bug to resolve in  question 13)
+- an_example3.expr should return 7
 
 
 Structure of the project
