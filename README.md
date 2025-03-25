@@ -296,7 +296,7 @@ The possible errors that could be found are:
 
 **Exercise 4**  
 **Question 4.1 (code):**  
-**Propose the OCaml code for a type command describing the Pfx instructions. It should be in the file pfx/basic/ast.ml.**
+**Propose the OCaml code for a type command describing the Pfx instructions. It should be in the file [pfx/basic/ast.ml](pfx/basic/ast.ml).**
 
 ```
 type command =  
@@ -310,7 +310,7 @@ type command =
  | Rem
 ```
 **Question 4.2 (code):**  
-**Write an OCaml function step that implements the small step reduction you defined above on Pfx instructions. It should be in the file pfx/basic/eval.ml**
+**Write an OCaml function step that implements the small step reduction you defined above on Pfx instructions. It should be in the file [pfx/basic/eval.ml](pfx/basic/eval.ml)**
 ```  
 let step state =  
  match state with  
@@ -330,7 +330,7 @@ let step state =
    else Ok(q, (y mod x) :: rest)  
  | _, _ -> Error("Invalid Operation", state)
 ```
-To test it:  
+To test it ([pfx/basic/tests/test_eval.ml](pfx/basic/tests/test_eval.ml)):  
 ```
 open OUnit2
 open BasicPfx.Ast
@@ -403,7 +403,7 @@ Defining *M* as a mapping from variables to memory locations (not implemented ye
 **![][image6]**
 
 **Question 5.2 (code):**  
-**Define a function to generate implementing the semantics you defined in the previous question. It should be in the file expr/basic/toPfx.ml.**
+**Define a function to generate implementing the semantics you defined in the previous question. It should be in the file [expr/basic/toPfx.ml](expr/basic/toPfx.ml).**
 ```
 open Ast
 open BasicPfx.Ast
@@ -437,7 +437,8 @@ let rec generate (expr : expression) : command list =
       code @ [Push 0; Sub]  
   | Var _ -> failwith "Not yet supported"
 ```
-To test it:
+To test it ([expr/basic/tests/test_generate.ml](expr/basic/tests/test_generate.ml)): 
+
 ```  
 open OUnit2
 open BasicExpr.ToPfx
@@ -470,7 +471,7 @@ It is also possible test it from the terminal:
 **Question 6.1 (code):**  
 **Write a lexer for the Pfx stack machine language. Complete the provided lexer.mll of pfx/basic. To test it without the parser, have a look at Moodle at the file simple\_expr\_lexer\_standalone.mll**
 
-Following the instruction to avoid using and declaring the parser, this is how the lexer.mll could be completed it:
+Following the instruction to avoid using and declaring the parser, this is how the lexer.mll (([pfx/basic/lexer.mll](pfx/basic/lexer.mll))) could be completed it:
 ```
 {
  (*Question 6.1*)
@@ -557,7 +558,7 @@ It can be tested using *utop* after compile lexer.mll by running ocamllex lexer.
 **Question 6.2 (code):**  
 **Reuse this code to be able to parse a file containing a Pfx program and print all the tokens encountered in the process.**
 
-We are going to comment the current content in the file pfxVM.ml to add this lines:
+We are going to comment the current content in the file pfxVM.ml ([](pfx/pfxVM.ml)) to add this lines:
 ```
 open BasicPfx.Lexer
  let rec examine_all lexbuf =
@@ -589,7 +590,7 @@ Being in pfx/, we can use it to test our lexer module passing the following expr
 
 **Exercise 7 (Locating errors, code)**  
 Modify your code from the previous exercise to be able to return the location of errors.  
-Modifications in lexer.mll:  
+Modifications in lexer.mll([pfx/basic/lexer.mll](/pfx/basic/lexer.mll)):  
 ```
 {
  (*Question 6.1*)
@@ -654,7 +655,7 @@ rule token = parse
      }
 ```
 
-Modifications in pfxVM.ml to test it:
+Modifications in pfxVM.ml([pfx/pfxVM.ml](pfx/pfxVM.ml)) to test it:
 ```  
 open BasicPfx.Lexer
 open Utils.Location
@@ -691,14 +692,14 @@ let compile file =
 let _ = Arg.parse [] compile ""
 ```
 The content of the file error\_syntax\_prog.pfx is:  
-*0 push 4 push**h** 2 add \-- error*  
+*0 push 4 push 2 **sum** \-- error*  
 ![][image10]
 
 **Exercise 8 (A first Pfx parser)**  
 **Question 8.1 (code):**  
 **Write a parser for the Pfx stack machine language.**
 
-The parser code is:  
+The parser code is ([pfx/basic/parser.mly](pfx/basic/parser.mly)):  
 ```
 %{
  open Ast
@@ -739,7 +740,7 @@ command:
 
 **Notice that it requires that you modify your lexer slightly to remove the main functions and replace the token type definition by an open of the parser module.**
 
-The pfxVM.ml code is:
+The pfxVM.ml ([pfx/pfxVM.ml](pfx/pfxVM.ml)) code is:
 ```  
 open BasicPfx
 open Utils
@@ -779,7 +780,7 @@ It returns 5:
 ![][image11]  
      
 Now, if it added a syntax error, the pfxVM.ml is also able to show the error location:  
-*3 add div**v***  
+*0 push 4 push 2 **sum** \-- error due to sum is not declared*  
 *![][image12]*
 
 **Exercise 9**  
@@ -799,7 +800,7 @@ Yes, it is required to add the declaration of these new 3 instructions as well a
 
 So, we modify the lexer.mll, parser.mly, ast.ml and eval.ml modules
 
-The lexer.mll content is:
+The lexer.mll ([pfx/basic/lexer.mll](pfx/basic/lexer.mll)) content is:
 ```  
 open Parser
 
@@ -866,7 +867,7 @@ rule token = parse
     raise (Error (Printf.sprintf "Illegal character '%c'" c, loc))
     }
 ```
-The parser.mly content is:
+The parser.mly ([pfx/basic/parser.mly](pfx/basic/parser.mly)) content is:
 ```  
 %{
  (* Ocaml code here*)
@@ -934,7 +935,7 @@ command:
 %%
 
 ```
-The ast.ml content is: 
+The ast.ml ([pfx/basic/ast.ml](pfx/basic/ast.ml)) content is: 
 ``` 
 type command =
  | Push of int (* Question 4.1 and 9.3 *)
@@ -975,7 +976,8 @@ let string_of_commands cmds = String.concat " " (List.map string_of_command cmds
 
 let string_of_program (args, cmds) = Printf.sprintf "%i args: %s\n" args (string_of_commands cmds)
 ```
-The eval.ml content is:
+The eval.ml ([pfx/basic/eval.ml](pfx/basic/eval.ml)) content is:
+
 ```  
 open Ast
 open Printf
@@ -1048,7 +1050,7 @@ let eval_program (numargs, cmds) args =
    | Error(msg,s) -> printf "Raised error %s in state %s\n" msg (string_of_state s)
  else printf "Raised error \nMismatch between expected and actual number of args\n"
 ```
-To test, it is added 2 new unit cases:
+To test, it is added 2 new unit cases ([pfx/basic/tests/test_eval.ml](pfx/basic/tests/test_eval.ml)):
 ```
 ( "Test Exec" >:: fun _ ->
      let state = ([Exec], [ExecSeq [Push 20; Add]]) in
@@ -1073,7 +1075,7 @@ It is required to add 2 new rules: one for functions and another one for applica
 **Question 10.3 (code):**  
 **Provide a new version of generate.**
 
-The new version for generate is:
+The new version for generate is ([expr/fun/toPfx.ml](expr/fun/toPfx.ml)):
 ```
 open Ast
 open BasicPfx.Ast
@@ -1118,12 +1120,12 @@ let rec generate env (expr : expression) : command list =
         [ExecSeq (generate new_env e)]
   
 ```
-To test it via terminal, it was required to edit also the **eval.ml**, **toPfx.ml** and the **compiler.ml.**  
+To test it via terminal, it was required to edit also the **eval.ml ([expr/fun/eval.ml](expr/fun/eval.ml))**, **toPfx.ml** and the **compiler.ml.**  
 
 The result of testing the content file: *(fun x \-\> x \+ 1\) 2* was 3 as expected.  
 **![][image16]**
 
-Also, we added unit test for **eval.ml** and **generate.ml:** 
+Also, we added unit test ([expr/fun/tests/test_generate.ml](expr/fun/tests/test_generate.ml)) for **eval.ml** and **generate.ml:** 
 ```
 open OUnit2
 open FunExpr.ToPfx
@@ -1211,7 +1213,7 @@ Initially, It is required to extend the lexer to recognize the new tokens “let
 
 It is important to place let at the top to give it the important precedence and also declaring the right associative property. 
 
-The new parser.mly contents is:
+The new parser.mly ([expr/fun/parser.mly](expr/fun/parser.mly)) contents is:
 ```
 (* Exercise 11.2 *)
 %{
