@@ -472,7 +472,7 @@ It is also possible test it from the terminal:
 **Question 6.1 (code):**  
 **Write a lexer for the Pfx stack machine language. Complete the provided lexer.mll of pfx/basic. To test it without the parser, have a look at Moodle at the file simple\_expr\_lexer\_standalone.mll**
 
-Following the instruction to avoid using and declaring the parser, this is how the lexer.mll (([pfx/basic/lexer.mll](pfx/basic/lexer.mll))) could be completed it:
+Following the instruction to avoid using and declaring the parser, this is how the lexer.mll ([pfx/basic/lexer.mll](pfx/basic/lexer.mll)) could be completed it:
 ```
 {
  (*Question 6.1*)
@@ -559,7 +559,7 @@ It can be tested using *utop* after compile lexer.mll by running ocamllex lexer.
 **Question 6.2 (code):**  
 **Reuse this code to be able to parse a file containing a Pfx program and print all the tokens encountered in the process.**
 
-We are going to comment the current content in the file pfxVM.ml ([](pfx/pfxVM.ml)) to add this lines:
+We are going to comment the current content in the file pfxVM.ml ([pfx/pfxVM.ml](pfx/pfxVM.ml)) to add this lines:
 ```
 open BasicPfx.Lexer
  let rec examine_all lexbuf =
@@ -1271,7 +1271,7 @@ simple_expr:
  | DIV       { Bdiv }
  | MOD       { Bmod }  
 ```
-The new lexer.mll content is:
+The new lexer.mll ([expr/fun/lexer.mll](expr/fun/lexer.mll)) content is:
 ```
 (* Exercise 11.2 *)
 {
