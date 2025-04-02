@@ -4,55 +4,38 @@ open BasicPfx.Ast
 open FunExpr.Ast
 open FunExpr.Eval
 
-(* Test expression: 2 + (3 * 4) *)
-let expr = Binop (BinOp.Badd, Const 2, Binop (BinOp.Bmul, Const 3, Const 4))
-let pfx_code = generate [] expr
-let result = eval [] expr
+let test_cases = [
+  (* 2 + (3 * 4) *)
+  (Binop (BinOp.Badd, Const 2, Binop (BinOp.Bmul, Const 3, Const 4)), 
+   [Push 2; Push 3; Push 4; Mul; Add], 
+   Int 14, "Addition and multiplication");
+  
+  (* (\x. x + 1) 2 *)
+  (App(Fun("x", Binop(Badd, Var "x", Const 1)), Const 2), 
+   [Push 2; ExecSeq [Push 0; Get; Push 1; Add]; Exec], 
+   Int 3, "Lambda application");
+  
+  (* (5 / 1) + (8 * -9) *)
+  (Binop(BinOp.Badd, Binop(BinOp.Bdiv, Const 5, Const 1), Binop(BinOp.Bmul, Const 8, Uminus (Const 9))), 
+   [Push 1; Push 5; Div; Push 8; Push 9; Push 0; Sub; Mul; Add], 
+   Int (-67), "Division, multiplication, and negative number");
 
-(* Test expression: (λx.x + 1) 2 *)
-let expr2 = App(Fun("x", Binop(Badd, Var "x", Const 1)), Const 2)
-
-let pfx_code2 = generate [] expr2
-let result2 = eval [] expr2
-
-(* Test expression: (5 / 1) + (8 * -9) *)
-let expr3 = Binop(BinOp.Badd, Binop(BinOp.Bdiv, Const 5, Const 1), Binop(BinOp.Bmul, Const 8, Uminus (Const 9) ))
-
-let pfx_code3 = generate [] expr3
-let result3 = eval [] expr3
+  (* (\x. x * 2) 5 *)
+  (App(Fun("x", Binop(Bmul, Var "x", Const 2)), Const 5), 
+   [Push 5; ExecSeq [Push 0; Get; Push 2; Mul]; Exec], 
+   Int 10, "Lambda application with multiplication");
+]
 
 let generate_tests =
-  [
-    "Generated code for expression" >:: (fun _ -> 
-      let expected = [Push 2; Push 3; Push 4; Mul; Add] in
-      assert_equal expected pfx_code
-    );
-    
-    "Generated code for (λx.x + 1) 2" >:: (fun _ -> 
-      let expected = [Push 2; ExecSeq [Push 0; Get; Push 1; Add]; Exec] in
-      assert_equal expected pfx_code2
-    ); 
+  List.map (fun (expr, expected_pfx, _, name) ->
+    name >:: fun _ -> assert_equal expected_pfx (generate [] expr)
+  ) test_cases
 
-    "Generated code for (5 / 1) + (8 * -9)" >:: (fun _ -> 
-      let expected = [Push 1; Push 5; Div ; Push 8; Push 9; Push 0; Sub; Mul; Add] in
-      assert_equal expected pfx_code3
-    ); 
-  ]
 let eval_tests =
-  [
-    "Evaluate expression" >:: (fun _ -> 
-      let expected = Int 14 in
-      assert_equal expected result
-    ); 
-    "Evaluate expression" >:: (fun _ -> 
-      let expected = Int 3 in
-      assert_equal expected result2
-    );
-    "Evaluate expression" >:: (fun _ -> 
-      let expected = Int (-67) in
-      assert_equal expected result3
-    ); 
-  ]
+  List.map (fun (expr, _, expected_eval, name) ->
+    name >:: fun _ -> assert_equal expected_eval (eval [] expr)
+  ) test_cases
+
 let suite =
   "Eval Tests"
   >::: [
