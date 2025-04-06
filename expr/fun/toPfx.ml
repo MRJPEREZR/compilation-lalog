@@ -16,7 +16,7 @@ let rec generate env (expr : expression) : command list =
     | Binop (BinOp.Bsub, e1, e2) ->
         let code1 = generate env e1 in  
         let code2 = generate env e2 in  
-        code2 @ code1 @ [Sub] (* Reverse order *)
+        code1 @ code2 @ [Swap; Sub]
     | Binop (BinOp.Bmul, e1, e2) ->
         let code1 = generate env e1 in  
         let code2 = generate env e2 in  
@@ -24,11 +24,11 @@ let rec generate env (expr : expression) : command list =
     | Binop (BinOp.Bdiv, e1, e2) ->
         let code1 = generate env e1 in  
         let code2 = generate env e2 in  
-        code2 @ code1 @ [Div]  (* Reverse order: denominator first *)
+        code1 @ code2 @ [Swap; Div] 
     | Binop (BinOp.Bmod, e1, e2) ->
         let code1 = generate env e1 in  
         let code2 = generate env e2 in  
-        code2 @ code1 @ [Rem]  (* Reverse order: denominator first *)
+        code1 @ code2 @ [Swap; Rem]
     | Uminus e ->
         let code = generate env e in  
         code @ [Push 0; Sub]  
