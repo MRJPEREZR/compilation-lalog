@@ -209,13 +209,13 @@ Either in expr/ and pfx/ folders, there are subfolders that provided different v
 Progress
 --------
 
-- We stopped at question 12 (proof of derivation of (((λx.λy.(x−y)) 12) 8))
+- We stopped at question 13.5 because of a bug.
 
 
 Know bugs and issues
 --------------------
 - Evaluating this expression (fun x -> (fun y -> x - y) 12 ) 8 should return 4 instead of 0.
-This issue is expected to be fix resolving question 13.
+This issue is expected to be fix resolving question 13 but trying it, we get an error developing a new version of generate function in toPfx.ml (not supported 100% closure for functions and apps).
 
 
 Helpful resources
@@ -1354,29 +1354,176 @@ The formal semantic proposed is:
 **Question 13.3 (code)**
 **If needed, extends the lexer and parser of Pfx to include these changes.**
 
-The new version of lexer.mll is:
+The new version of [lexer.mll](pfx/basic/lexer.mll?ref=exercise-13) is:
 ```
-code
+{
+  (*Question 6.1, 9.3 and 13.3*)
+  
+  open Parser
+
+  open Utils.Location
+
+  let print_token = function 
+    | EOF    -> print_string "EOF"
+    | INT i  -> print_int i
+    | PUSH   -> print_string "PUSH"
+    | POP    -> print_string "POP"
+    | SWAP   -> print_string "SWAP"
+    | ADD    -> print_string "ADD"
+    | SUB    -> print_string "SUB"
+    | MUL    -> print_string "MUL"
+    | DIV    -> print_string "DIV"
+    | REM    -> print_string "REM"
+    | EXEC   -> print_string "EXEC"
+    | GET    -> print_string "GET"
+    | APPEND    -> print_string "APPEND"
+    | LBRACE -> print_string "LBRACE"
+    | RBRACE -> print_string "RBRACE"
+  
+  let mk_int nb lexbuf =
+    try INT (int_of_string nb)
+    with Failure _ -> 
+      let loc = curr lexbuf in
+        raise (Error(Printf.sprintf "Illegal integer '%s'" nb, loc))
+} 
+
+let newline = (['\n' '\r'] | "\r\n")
+let blank = [' ' '\014' '\t' '\012']
+let not_newline_char = [^ '\n' '\r']
+let digit = ['0'-'9']
+
+rule token = parse
+  (* newlines *)
+  | newline { token lexbuf } (* add incr_line lexbuf if you want to read multiple lines*)
+  (* blanks *)
+  | blank + { token lexbuf }
+  (* end of file *)
+  | eof      { EOF }
+  (* comments *)
+  | "--" not_newline_char*  { token lexbuf }
+  (* integers *)
+  | digit+ as nb           { mk_int nb lexbuf}
+  (* commands  *)
+  | "push"                 { PUSH }
+  | "pop"                  { POP }
+  | "swap"                 { SWAP }
+  | "add"                  { ADD }
+  | "sub"                  { SUB }
+  | "mul"                  { MUL }
+  | "div"                  { DIV }
+  | "rem"                  { REM }
+  | "exec"                 { EXEC }
+  | "get"                  { GET }
+  | "append"               { APPEND } (* Exercise 13.3 *)
+  | "{"                    { LBRACE }
+  | "}"                    { RBRACE }
+  (* illegal characters *)
+  | _ as c                 {
+    let loc = curr lexbuf in
+      raise (Error (Printf.sprintf "Illegal character '%c'" c, loc))
+      }
 ```
 
-The new versoon of parser.mly is:
+The new version of [parser.mly](pfx/basic/parser.mly) is:
 ```
-code
+%{
+  open Ast
+
+%}
+
+(**************
+ * The tokens *
+ **************)
+
+(* enter tokens here, they should begin with %token *)
+%token EOF PUSH POP SWAP ADD SUB MUL DIV REM EXEC GET APPEND LBRACE RBRACE
+%token <int> INT
+
+
+(******************************
+ * Entry points of the parser *
+ ******************************)
+
+(* enter your %start clause here *)
+%start <Ast.program> program
+
+%%
+
+(*************
+ * The rules *
+ *************)
+
+(* list all rules composing your grammar; obviously your entry point has to be present *)
+
+program: i=INT commands EOF { (i, $2) }
+
+commands:
+  | command          {[$1]}
+  | command commands {$1 :: $2}
+
+command:
+  | PUSH INT {Push $2}
+  | POP      {Pop}
+  | SWAP     {Swap}
+  | ADD      {Add}
+  | SUB      {Sub}
+  | MUL      {Mul}
+  | DIV      {Div}
+  | REM      {Rem}
+  | EXEC     { Exec }
+  | GET      { Get }
+  | APPEND   { Append } (* Exercise 13.3 *)
+  | LBRACE commands RBRACE { ExecSeq $2 }
+
+%%
 ```
 
 **Question 13.4 (math)**
 **Give the formal rules of translation from Expr to Pfx to support closure.**
 
-The rule of translation from expr to pfx proposed is: 
-**![][image25]** 
+To do.
+
 
 **Question 13.5 (code)**
 **Provide a new version of generate.**
-To Do
+(There is a bug to resolve)
+The new version of [toPfx.ml](expr/fun/toPfx.ml?ref=exercise-13) is:
+```
+open Ast
+open BasicPfx.Ast
+
+let rec generate env (expr : expression) : command list =
+    match expr with
+    | Const n -> [Push n]
+    | Var x -> 
+        (try [Push (List.assoc x env); Get] 
+            with Not_found -> failwith ("Unbound variable: " ^ x))
+    | Binop (op, e1, e2) ->
+        let code1 = generate env e1 in
+        let code2 = generate env e2 in
+        let op_cmd = match op with
+            | BinOp.Badd -> [Add]
+            | BinOp.Bsub -> [Swap; Sub]
+            | BinOp.Bmul -> [Mul]
+            | BinOp.Bdiv -> [Swap; Div]
+            | BinOp.Bmod -> [Swap; Rem]
+        in
+        code1 @ code2 @ op_cmd
+    | Uminus e -> generate env e @ [Push 0; Sub]
+    | App(e1, e2) ->
+        let code1 = generate env e1 in  (* generates the function *)
+        let code2 = generate env e2 in  (* generates the argument *)
+        (* Push argument, then function, then Exec *)
+        code2 @ code1 @ [Exec]
+    | Fun (x, e) ->
+        let body_code = generate ((x, 0) :: env) e in
+        (* Create closure with just the body code *)
+        [Pushval (Closure body_code)]  (* Store commands as a Closure value *)
+```
 
 **Question 13.6 (expl )**
 **Give the compiled version of the expression ((λx.λy.(x − y)) 12) 8. Then describe step by step the evaluation of its Pfx translation. Is it better?**
-To Do
+To Do.
 
 [image1]: images/image1.png
 [image2]: images/image2.png
@@ -1401,6 +1548,5 @@ To Do
 [image21]: images/image21.png
 [image22]: images/image22.png
 [image23]: images/image23.png
-
-
+[image24]: images/image24.png
 
