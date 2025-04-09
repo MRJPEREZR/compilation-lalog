@@ -18,6 +18,7 @@
     | REM    -> print_string "REM"
     | EXEC   -> print_string "EXEC"
     | GET    -> print_string "GET"
+    | APPEND    -> print_string "APPEND"
     | LBRACE -> print_string "LBRACE"
     | RBRACE -> print_string "RBRACE"
   
@@ -55,6 +56,7 @@ rule token = parse
   | "rem"                  { REM }
   | "exec"                 { EXEC }
   | "get"                  { GET }
+  | "append"               { APPEND } (* Exercise 13.3 *)
   | "{"                    { LBRACE }
   | "}"                    { RBRACE }
   (* illegal characters *)

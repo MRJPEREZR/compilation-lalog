@@ -10,7 +10,7 @@
  **************)
 
 (* enter tokens here, they should begin with %token *)
-%token EOF PUSH POP SWAP ADD SUB MUL DIV REM EXEC GET LBRACE RBRACE
+%token EOF PUSH POP SWAP ADD SUB MUL DIV REM EXEC GET APPEND LBRACE RBRACE
 %token <int> INT
 
 
@@ -46,6 +46,7 @@ command:
   | REM      {Rem}
   | EXEC     { Exec }
   | GET      { Get }
+  | APPEND   { Append } (* Exercise 13.3 *)
   | LBRACE commands RBRACE { ExecSeq $2 }
 
 %%

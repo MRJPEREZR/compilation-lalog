@@ -52,7 +52,7 @@ let step_tests =
       let state = ([ Rem ], int_stack [ 1; 0 ]) in
       assert_equal (Error("Remain by zero", state)) (step state) );
     ( "Test Exec" >:: fun _ ->
-      let state = ([Exec], [ExecSeq [Push 20; Add]]) in
+      let state = ([Exec], [Closure [Push 20; Add]]) in
       let expected = Ok ([Push 20; Add], []) in
       assert_equal expected (step state));
      ("Test Get" >:: fun _ -> 
