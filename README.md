@@ -1337,6 +1337,47 @@ The proof derivation computing is presenting below:
 **![][image22]**  
 **![][image23]**
 
+**Exercise 13**
+**Question 13.1 (expl)**  
+**Is it possible to translate Expr to Pfx? If yes, can you give the idea of the translation. If no, what would be necessary to add to Pfx ?**
+
+With the code developed until exercise 10, it is not possible translate expr to pfx. To support the translation, it is reauired to extend Pfx with a new command to inject values or commands into executable sequences at runtime: append. It is for that, the next question ask for the formal semantic of this command. 
+
+This command allows creating closures by prepending commands that recreate the environment.
+
+**Question 13.2 (math)**
+**Give the formal semantics of append.**
+
+The formal semantic proposed is:
+**![][image24]** 
+
+**Question 13.3 (code)**
+**If needed, extends the lexer and parser of Pfx to include these changes.**
+
+The new version of lexer.mll is:
+```
+code
+```
+
+The new versoon of parser.mly is:
+```
+code
+```
+
+**Question 13.4 (math)**
+**Give the formal rules of translation from Expr to Pfx to support closure.**
+
+The rule of translation from expr to pfx proposed is: 
+**![][image25]** 
+
+**Question 13.5 (code)**
+**Provide a new version of generate.**
+To Do
+
+**Question 13.6 (expl )**
+**Give the compiled version of the expression ((λx.λy.(x − y)) 12) 8. Then describe step by step the evaluation of its Pfx translation. Is it better?**
+To Do
+
 [image1]: images/image1.png
 [image2]: images/image2.png
 [image3]: images/image3.png
