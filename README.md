@@ -1424,7 +1424,7 @@ rule token = parse
       }
 ```
 
-The new version of [parser.mly](pfx/basic/parser.mly) is:
+The new version of [parser.mly](pfx/basic/parser.mly?ref=exercise-13) is:
 ```
 %{
   open Ast
