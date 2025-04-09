@@ -1521,7 +1521,7 @@ let rec generate env (expr : expression) : command list =
         [Pushval (Closure body_code)]  (* Store commands as a Closure value *)
 ```
 
-**Question 13.6 (expl )**
+**Question 13.6 (expl)**
 **Give the compiled version of the expression ((λx.λy.(x − y)) 12) 8. Then describe step by step the evaluation of its Pfx translation. Is it better?**
 To Do.
 
